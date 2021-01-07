@@ -46,11 +46,38 @@ $(document).ready(function(){
 
 })
 
+$('#register-btn').click(function(event){
+    event.preventDefault()
+    var email = $('#email-register').val()
+    var password = $('#password-register').val() 
+
+    $.ajax({
+        method: 'POST',
+        url: `${baseUrl}/register`,
+        data:{
+            email,
+            password
+        }
+    })
+    .done(response=>{
+        $('#form-register').hide(2000)
+        $('#form-login').fadeIn()
+        $('#listSong').hide()
+        $('#navbar').hide()
+    })
+    .fail(err=>{
+        console.log(err, '=> error')
+    })
+    .always(()=>{
+        $('#email-register').val('')
+        $('#password-register').val('')
+    })
+})
+
 $('#login-btn').click(function(event){
     event.preventDefault()
     var email = $('#email').val()
     var password = $('#password').val() 
-    console.log(email, password)
 
     $.ajax({
         method: 'POST',
@@ -61,7 +88,6 @@ $('#login-btn').click(function(event){
         }
     })
     .done(response=>{
-        console.log(response, '=> response')
         localStorage.setItem('access_token', response.access_token)
         $('#form-login').hide()
         $('#listSong').show()
@@ -90,7 +116,6 @@ function onSignIn(googleUser) {
         data:{id_token}
     })
     .done(response=>{
-        console.log(response, '=> response')
         localStorage.setItem('access_token', response.access_token)
         $('#form-login').hide()
         $('#listSong').show()
@@ -104,3 +129,4 @@ function onSignIn(googleUser) {
         $('#password').val('')
     })
   }
+
