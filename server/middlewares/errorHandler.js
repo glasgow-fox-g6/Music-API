@@ -23,6 +23,10 @@ const errorHandler =
             res.status(401).json({message: "Sorry you don't have permision"})
             break
 
+        case 'Email/Password incorrect':
+            res.status(401).json({message: "Email/Password incorrect"})
+            break
+
         case 'Forbidden':
             res.status(403).json({message: "Log in first"})
             break

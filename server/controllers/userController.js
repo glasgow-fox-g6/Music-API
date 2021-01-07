@@ -27,7 +27,7 @@ class Controller{
         User.findOne({where:{email: dataUser.email}})
         .then(data=>{
             if(!data){
-                res.status(401).json({message: 'Email/Password incorect'})
+                next({name:'Email/Password incorrect'})
             }else{
                 let cekPassword = cekPass(dataUser.password, data.password)
                 if(cekPassword){
@@ -35,7 +35,7 @@ class Controller{
                     let access_token = generateToken(payload)
                     return res.status(200).json({id: data.id, email: data.email, access_token})
                 }else{
-                    res.status(401).json({message: 'Email/Password incorrect'})
+                    next({name:'Email/Password incorrect'})
                 }
             }
         })
