@@ -8,6 +8,4 @@ router.use('/', userRouter)
 router.use(authentication)
 router.use('/', songsRouter)
 
-
-
 module.exports = router
