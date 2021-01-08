@@ -44,6 +44,8 @@ $(document).ready(function(){
       url: `${baseUrl}/songs/search?q=${query}`,
     })
       .done(function(response) {
+         $('#search-results').empty()
+      
         response.forEach(song => {
           $('#search-results').append(`<div id=${song.trackId} class="card" style="width: 18rem;">
       <img src="${song.artworkUrl}" class="card-img-top" alt="Artwork Image">
