@@ -46,7 +46,7 @@ $(document).ready(function(){
     })
       .done(function(response) {
         console.log(response)
-
+         $('#search-results').empty()
         response.forEach(song => {
           $('#search-results').append(`<div class="card" style="width: 18rem;">
       <img src="${song.artworkUrl}" class="card-img-top" alt="Artwork Image">
