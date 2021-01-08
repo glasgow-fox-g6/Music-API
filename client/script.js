@@ -210,7 +210,7 @@ $('#nav-search').click(function(e) {
   e.preventDefault()
 
   $('#songs-search').show()
-  $('#songs-results').show()
+  $('#search-results').show()
   $('#my-playlist').hide()
 })
 
@@ -218,7 +218,7 @@ $('#nav-my-playlist').click(function(e) {
   e.preventDefault()
 
   $('#songs-search').hide()
-  $('#songs-results').hide()
+  $('#search-results').hide()
   $('#my-playlist').show()
   $('#my-playlist').empty()
 
