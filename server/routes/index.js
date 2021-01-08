@@ -6,6 +6,6 @@ const {authentication} = require('../middlewares/auth')
 
 router.use('/', userRouter)
 router.use(authentication)
-router.use('/', songsRouter)
+router.use('/songs', songsRouter)
 
 module.exports = router

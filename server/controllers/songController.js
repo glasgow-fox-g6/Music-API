@@ -57,7 +57,7 @@ class Controller {
         axios.get(iTunesAPI, {
             params: {
                 term: req.query.q,
-                // limit: 20,
+                limit: 6,
                 media: 'music'
             }
         })
