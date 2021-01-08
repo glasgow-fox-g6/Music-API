@@ -17,10 +17,31 @@ module.exports = {
       album: {
         type: Sequelize.STRING
       },
+      genre: {
+        type: Sequelize.STRING
+      },
+      releaseDate: {
+        type: Sequelize.DATEONLY
+      },
+      trackId: {
+        type: Sequelize.INTEGER
+      },
+      appleStoreUrl: {
+        type: Sequelize.STRING
+      },
+      previewUrl: {
+        type: Sequelize.STRING
+      },
+      artworkUrl: {
+        type: Sequelize.STRING
+      },
+      trackTimeMillis: {
+        type: Sequelize.INTEGER,
+      },
       UserId: {
         type: Sequelize.INTEGER,
-        references:{
-          model: {tableName: 'Users'},
+        references: {
+          model: { tableName: 'Users' },
           key: 'id'
         },
         onDelete: 'CASCADE',

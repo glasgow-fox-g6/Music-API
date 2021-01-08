@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const Controller = require('../controllers/songController')
 
-router.get('/listSong', Controller.listSong)
-router.post('/addSong', Controller.addSong)
-router.get('/getSongById', Controller.getSongById)
-router.get('/searchSong', Controller.searchSong)
+router.get('/songs', Controller.listSong)
+router.post('/songs', Controller.addSong)
+router.get('/songs/:id', Controller.getSongById)
+router.get('/songs/search', Controller.searchSong)
 
 module.exports = router
