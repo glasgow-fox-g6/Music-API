@@ -30,7 +30,45 @@ $(document).ready(function(){
         $('#listSong').hide()
         $('#navbar').hide()
     }
-  });
+
+  // search songs
+  $('#searchBtn').click(function(e) {
+    e.preventDefault()
+
+    let query = encodeURIComponent($('#search').val())
+    console.log(query)
+    $.get({
+      method: 'GET',
+      headers: {
+        access_token: localStorage.access_token
+      },
+      url: `${baseUrl}/songs/search?q=${query}`,
+    })
+      .done(function(response) {
+        console.log(response)
+
+        response.forEach(song => {
+          $('#search-results').append(`<div class="card" style="width: 18rem;">
+      <img src="${song.artworkUrl}" class="card-img-top" alt="Artwork Image">
+      <div class="card-body">
+        <h5 class="card-title">${song.title}</h5>
+        <p class="card-text artist">${song.artist}</p>
+        <p class="card-text album">${song.album}</p>
+        <p class="card-text genre">${song.genre}</p>
+        <p class="card-text duration">${convertDuration(song.trackTimeMillis)}</p>
+        <button type="submit" class="add-playlist btn btn-primary">Add to Playlist</button>
+      </div>
+    </div>`)
+        })
+      })
+      .fail(err=>{
+        console.log(err, '=> error')
+      })
+      .always( () => {
+
+      })
+  })
+});
 
   $('#logout').click(function(event){
     event.preventDefault()
@@ -49,7 +87,7 @@ $(document).ready(function(){
 $('#register-btn').click(function(event){
     event.preventDefault()
     var email = $('#email-register').val()
-    var password = $('#password-register').val() 
+    var password = $('#password-register').val()
 
     $.ajax({
         method: 'POST',
@@ -77,7 +115,7 @@ $('#register-btn').click(function(event){
 $('#login-btn').click(function(event){
     event.preventDefault()
     var email = $('#email').val()
-    var password = $('#password').val() 
+    var password = $('#password').val()
 
     $.ajax({
         method: 'POST',
@@ -109,7 +147,7 @@ function onSignIn(googleUser) {
     // console.log('Image URL: ' + profile.getImageUrl());
     // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
     const id_token = googleUser.getAuthResponse().id_token
-    
+
     $.ajax({
         method: 'POST',
         url: `${baseUrl}/login/google`,
@@ -122,11 +160,16 @@ function onSignIn(googleUser) {
         $('#navbar').show()
     })
     .fail((xhr, status )=>{
-        
+
     })
     .always(()=>{
         $('#email').val('')
         $('#password').val('')
     })
-  }
+}
 
+function convertDuration(trackTimeMillis) {
+  // TODO improve padding
+  let trackTimeS = Math.floor(trackTimeMillis / 1000)
+  return `${Math.floor(trackTimeS / 60)}:${trackTimeS % 60}`
+}
