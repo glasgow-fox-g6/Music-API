@@ -44,8 +44,8 @@ $(document).ready(function(){
       },
       url: `${baseUrl}/songs/search?q=${query}`,
     })
-      .done(function(response) {
-        console.log(response)
+      .done(response => {
+          console.log(response)
          $('#search-results').empty()
         response.forEach(song => {
           $('#search-results').append(`<div class="card" style="width: 18rem;">
@@ -65,7 +65,7 @@ $(document).ready(function(){
         console.log(err, '=> error')
       })
       .always( () => {
-
+        encodeURIComponent($('#search').val(''))
       })
   })
 });
@@ -81,6 +81,7 @@ $(document).ready(function(){
     $('#form-register').hide()
     $('#listSong').hide()
     $('#navbar').hide()
+    $('#search-results').empty()
 
 })
 
