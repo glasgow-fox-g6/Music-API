@@ -36,8 +36,7 @@ $(document).ready(function(){
     e.preventDefault()
 
     let query = encodeURIComponent($('#search').val())
-    console.log(query)
-    $.get({
+    $.ajax({
       method: 'GET',
       headers: {
         access_token: localStorage.access_token
@@ -45,20 +44,53 @@ $(document).ready(function(){
       url: `${baseUrl}/songs/search?q=${query}`,
     })
       .done(function(response) {
-        console.log(response)
-
         response.forEach(song => {
-          $('#search-results').append(`<div class="card" style="width: 18rem;">
+          $('#search-results').append(`<div id=${song.trackId} class="card" style="width: 18rem;">
       <img src="${song.artworkUrl}" class="card-img-top" alt="Artwork Image">
       <div class="card-body">
-        <h5 class="card-title">${song.title}</h5>
-        <p class="card-text artist">${song.artist}</p>
-        <p class="card-text album">${song.album}</p>
-        <p class="card-text genre">${song.genre}</p>
-        <p class="card-text duration">${convertDuration(song.trackTimeMillis)}</p>
-        <button type="submit" class="add-playlist btn btn-primary">Add to Playlist</button>
+        <h5 class="card-title song-title">${song.title}</h5>
+        <p class="card-text song-artist">${song.artist}</p>
+        <p class="card-text song-album">${song.album}</p>
+        <p class="card-text song-genre">${song.genre}</p>
+        <p class="card-text song-duration">${convertDuration(song.trackTimeMillis)}</p>
+<p class="d-none song-releaseDate">${song.releaseDate}</p>
+<p class="d-none card-text song-trackId">${song.trackId}</p>
+<p class="d-none card-text song-appleStoreUrl">${song.appleStoreUrl}</p>
+<p class="d-none card-text song-previewUrl">${song.previewUrl}</p>
+        <button id="${song.trackId}-btn" type="submit" class="add-playlist btn btn-primary">Add to Playlist</button>
       </div>
     </div>`)
+
+          $(`#${song.trackId}-btn`).click(function(e) {
+            e.preventDefault()
+            let data = {
+              title: song.title,
+              artist: song.artist,
+              album: song.album,
+              genre: song.genre,
+              releaseDate: song.releaseDate,
+              trackId: song.trackId,
+              appleStoreUrl: song.appleStoreUrl,
+              previewUrl: song.previewUrl,
+              artworkUrl: song.artworkUrl,
+              trackTimeMillis: song.trackTimeMillis,
+            }
+
+            $.ajax({
+              method: 'POST',
+              headers: {
+                access_token: localStorage.access_token
+              },
+              url: `${baseUrl}/songs`,
+              data
+            })
+              .done(resp => {
+                console.log(resp)
+              })
+              .fail(err => {
+                console.log(err)
+              })
+          })
         })
       })
       .fail(err=>{
@@ -173,3 +205,48 @@ function convertDuration(trackTimeMillis) {
   let trackTimeS = Math.floor(trackTimeMillis / 1000)
   return `${Math.floor(trackTimeS / 60)}:${trackTimeS % 60}`
 }
+
+$('#nav-search').click(function(e) {
+  e.preventDefault()
+
+  $('#songs-search').show()
+  $('#songs-results').show()
+  $('#my-playlist').hide()
+})
+
+$('#nav-my-playlist').click(function(e) {
+  e.preventDefault()
+
+  $('#songs-search').hide()
+  $('#songs-results').hide()
+  $('#my-playlist').show()
+  $('#my-playlist').empty()
+
+  $.ajax({
+    method: 'GET',
+    headers: {
+      access_token: localStorage.access_token
+    },
+    url: `${baseUrl}/songs`,
+  })
+  .done(function(response) {
+        response.forEach(song => {
+          $('#my-playlist').append(`<div id=${song.trackId} class="card" style="width: 18rem;">
+      <img src="${song.artworkUrl}" class="card-img-top" alt="Artwork Image">
+      <div class="card-body">
+        <h5 class="card-title song-title">${song.title}</h5>
+        <p class="card-text song-artist">${song.artist}</p>
+        <p class="card-text song-album">${song.album}</p>
+        <p class="card-text song-genre">${song.genre}</p>
+        <p class="card-text song-duration">${convertDuration(song.trackTimeMillis)}</p>
+<p class="d-none song-releaseDate">${song.releaseDate}</p>
+<p class="d-none card-text song-trackId">${song.trackId}</p>
+<p class="d-none card-text song-appleStoreUrl">${song.appleStoreUrl}</p>
+<p class="d-none card-text song-previewUrl">${song.previewUrl}</p>
+        <button id="${song.trackId}-btn" type="submit" class="show-details btn btn-primary">Show Details</button>
+      </div>
+    </div>`)
+
+        })
+      })
+})
